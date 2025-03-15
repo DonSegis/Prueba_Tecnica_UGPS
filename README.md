@@ -26,7 +26,7 @@ Los usuarios pueden:
 
 ## 🎥 Demo en vivo
 
-Puedes ver la aplicación desplegada en el siguiente enlace: **[DEMO en Vercel](https://tu-app.vercel.app/)**
+Puedes ver la aplicación desplegada en el siguiente enlace: (https://pruebatecnicaugps-production.up.railway.app)
 
 ---
 
@@ -37,8 +37,8 @@ Para ejecutar el proyecto localmente, sigue estos pasos:
 ### 1️⃣ Clonar el repositorio
 
 ```bash
- git clone https://github.com/tu-usuario/metacritic-greatest.git
- cd metacritic-greatest
+ git clone https://github.com/DonSegis/Prueba_Tecnica_UGPS.git
+ cd Prueba_Tecnica_UGPS
 ```
 
 ### 2️⃣ Instalar dependencias

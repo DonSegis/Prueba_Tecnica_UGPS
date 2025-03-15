@@ -12,13 +12,14 @@ export default function Home() {
   const [filters, setFilters] = useState<FilterParams>({});
   const [page, setPage] = useState(1);
   const [nextPage, setNextPage] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true); // Estado de carga
 
   useEffect(() => {
     const fetchGames = async () => {
+      setIsLoading(true); // Inicia la carga
       window.scrollTo({ top: 0, behavior: "smooth" });
 
       // Determina qué función de API usar (juegos filtrados o top-rated)
-
       const { games, nextPage } =
         Object.keys(filters).length === 0
           ? await getTopRatedGames(page)
@@ -55,6 +56,7 @@ export default function Home() {
       // Aplicar el mapeo y actualizar estados
       setFilteredGames(games.map(mapGames));
       setNextPage(nextPage);
+      setIsLoading(false); // Finaliza la carga
     };
 
     fetchGames();
@@ -75,15 +77,24 @@ export default function Home() {
           The Ultimate Game Rankings
         </p>
         <GameFilters onFilterChange={handleFilterChange} />
+
         {/* Loader cuando los juegos están cargando */}
-        {filteredGames.length === 0 ? (
+        {isLoading ? (
           <div className="flex flex-col items-center justify-center h-screen">
             <div className="w-12 h-12 border-4 border-t-transparent border-white rounded-full animate-spin"></div>
             <p className="mt-4 text-white text-lg font-semibold">
               Loading games...
             </p>
           </div>
+        ) : filteredGames.length === 0 ? (
+          // Mensaje cuando no hay juegos en el filtrado
+          <div className="flex flex-col items-center justify-center h-screen">
+            <p className="mt-4 text-white text-lg font-semibold">
+              No se encontraron juegos.
+            </p>
+          </div>
         ) : (
+          // Si hay juegos, los muestra
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredGames.map((game) => (
               <GameCard key={game.id} game={game} />
@@ -92,27 +103,29 @@ export default function Home() {
         )}
 
         {/* Paginación */}
-        <div className="flex justify-center mt-8 gap-4 items-center">
-          {page > 1 && (
-            <Button
-              onClick={() => setPage(page - 1)}
-              variant="outline"
-              className="rounded-full px-6 py-2"
-            >
-              Previous
-            </Button>
-          )}
-          <span className="text-lg font-semibold">Page {page}</span>
-          {nextPage && (
-            <Button
-              onClick={() => setPage(page + 1)}
-              variant="outline"
-              className="rounded-full px-6 py-2"
-            >
-              Next
-            </Button>
-          )}
-        </div>
+        {filteredGames.length >= 28 && (
+          <div className="flex justify-center mt-8 gap-4 items-center">
+            {page > 1 && (
+              <Button
+                onClick={() => setPage(page - 1)}
+                variant="outline"
+                className="rounded-full px-6 py-2"
+              >
+                Previous
+              </Button>
+            )}
+            <span className="text-lg font-semibold">Page {page}</span>
+            {nextPage && (
+              <Button
+                onClick={() => setPage(page + 1)}
+                variant="outline"
+                className="rounded-full px-6 py-2"
+              >
+                Next
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </main>
   );
